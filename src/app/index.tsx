@@ -22,7 +22,7 @@ export function Home() {
             <View style={styles.content}>
 
                 <Button
-                    titulo="Adicionar Produto"
+                    titulo="+ Adicionar Produto"
                     onPress={handleAdicionar}
                 />
 
