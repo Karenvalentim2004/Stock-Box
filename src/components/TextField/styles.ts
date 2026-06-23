@@ -26,4 +26,10 @@ export const styles = StyleSheet.create({
         color: colors.white,
         fontSize: 14,
     },
+
+    inputMultiline: {
+        height: 120,
+        textAlignVertical: 'top',
+        paddingTop: 16,
+    },
 });

@@ -22,7 +22,10 @@ export function TextField({
             </Text>
 
             <TextInput
-                style={styles.input}
+                style={[
+                    styles.input,
+                    rest.multiline && styles.inputMultiline,
+                ]}
                 placeholderTextColor="#6B7280"
                 {...rest}
             />

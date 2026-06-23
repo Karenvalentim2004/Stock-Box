@@ -1,90 +1,128 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 import {
     View,
-    TextInput,
-    TextInputProps,
-    FlatList
+    FlatList,
 } from 'react-native'
 
-import { Ionicons } from '@expo/vector-icons'
+import {
+    Produto,
+    getProdutos,
+    getTotalProdutos,
+    getValorTotalEstoque,
+    searchProdutos,
+} from '@/database/produtoRepository'
 
-import { colors } from '@/theme/colors'
+import { Header } from '@/components/Header'
+import { SearchInput } from '@/components/SearchInput'
+import { SummaryCard } from '@/components/SummaryCard'
+import { ProductCard } from '@/components/ProductCard'
+import { Button } from '@/components/Button'
+
 import { styles } from './styles'
-import { Card } from '@/components/Card'
-import { ProdutoCard } from '@/components/ProductCard'
-import { TextField } from '@/components/TextField'
-import { CurrencyField } from '@/components/CurrencyField'
-
-
-const produtos = [
-    {
-        id: '1',
-        nome: 'Mouse Gamer',
-        quantidade: 15,
-        imagem: 'https://picsum.photos/200',
-    },
-    {
-        id: '2',
-        nome: 'Teclado Mecânico',
-        quantidade: 8,
-        imagem: 'https://picsum.photos/201',
-    },
-];
 
 export function Home() {
-    const [pesquisa, setPesquisa] = useState('');
-    const [valor, setValor] = useState<number | null>(null);
+
+    const navigation = useNavigation()
+
+    const [pesquisa, setPesquisa] = useState('')
+
+    const [produtos, setProdutos] = useState<Produto[]>([])
+    const [totalProdutos, setTotalProdutos] = useState(0)
+    const [valorTotal, setValorTotal] = useState(0)
+
+    function carregarDados(texto = '') {
+
+        const lista =
+            texto.trim().length > 0
+                ? searchProdutos(texto)
+                : getProdutos()
+
+        const total = getTotalProdutos()
+
+        const valor = getValorTotalEstoque()
+
+        setProdutos(lista)
+        setTotalProdutos(total)
+        setValorTotal(valor)
+
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            carregarDados()
+        }, [])
+    )
+
+    function handleAdicionarProduto() {
+        navigation.navigate('add-product' as never)
+    }
 
     return (
         <View style={styles.container}>
-            {/* <SearchInput
+
+            <Header
+                titulo="Stock Box"
+            />
+
+            <SearchInput
                 value={pesquisa}
-                onChangeText={setPesquisa}
-            /> */}
+                onChangeText={(texto) => {
+
+                    setPesquisa(texto)
+
+                    carregarDados(texto)
+
+                }}
+            />
 
             <View style={styles.cardsContainer}>
-                <Card
+
+                <SummaryCard
                     titulo="Produtos"
-                    valor="15"
+                    valor={String(totalProdutos)}
                     icone="cube-outline"
                 />
 
-                <Card
+                <SummaryCard
                     titulo="Estoque"
-                    valor="R$ 2.450"
+                    valor={`R$ ${valorTotal.toFixed(2)}`}
                     icone="cash-outline"
                 />
+
             </View>
 
             <FlatList
                 data={produtos}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => String(item.id)}
+                showsVerticalScrollIndicator={false}
                 numColumns={2}
+                columnWrapperStyle={styles.row}
+                contentContainerStyle={styles.lista}
                 renderItem={({ item }) => (
-                    <ProdutoCard
-                        titulo={item.nome}
+                    <ProductCard
+                        titulo={item.titulo}
                         quantidade={item.quantidade}
                         imagem={item.imagem}
+                        onPress={() =>
+                            navigation.navigate(
+                                'product-details' as never,
+                                {
+                                    id: item.id,
+                                } as never
+                            )
+                        }
                     />
                 )}
             />
 
-            <TextField
-                titulo="Nome do Produto"
-                placeholder="Digite o nome"
+            <Button
+                titulo="Adicionar Produto"
+                onPress={handleAdicionarProduto}
             />
 
-            <TextField
-                titulo="URL da Imagem"
-                placeholder="https://..."
-            />
-
-            <CurrencyField
-                titulo="Valor Unitário"
-                valor={valor}
-                onChangeValor={setValor}
-            />
         </View>
-    );
+    )
 }

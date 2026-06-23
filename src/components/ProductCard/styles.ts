@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     titulo: {
         color: colors.white,
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: 700,
     },
 
     quantidade: {

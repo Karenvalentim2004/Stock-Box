@@ -6,9 +6,11 @@ import {
 } from 'react-native'
 
 import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 import { styles } from './styles'
 import { colors } from '@/theme/colors'
+
 
 type Props = ViewProps & {
     titulo: string;
@@ -18,7 +20,7 @@ type Props = ViewProps & {
     onEditar?: () => void;
 }
 
-export function Header({
+export function Header({    
     titulo,
     mostrarVoltar = false,
     mostrarEditar = false,
