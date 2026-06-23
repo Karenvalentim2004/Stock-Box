@@ -3,12 +3,12 @@ import {
     Text,
     TouchableOpacity,
     ViewProps,
-} from 'react-native';
+} from 'react-native'
 
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'
 
-import { styles } from './styles';
-import { colors } from '@/theme/colors';
+import { styles } from './styles'
+import { colors } from '@/theme/colors'
 
 type Props = ViewProps & {
     titulo: string;

@@ -1,17 +1,33 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 
-import { colors } from '@/theme/colors';
+import { colors } from '@/theme/colors'
 
 export const styles = StyleSheet.create({
 
     container: {
-        flex: 1,
-        backgroundColor: colors.black,
+        width: '100%',
+        height: 48,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: colors.teal[800],
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: colors.teal[700],
+        paddingHorizontal: 14,
+        marginBottom: 20,
     },
 
-    content: {
+    input: {
         flex: 1,
-        padding: 20,
+        marginLeft: 10,
+        color: colors.white,
+        fontSize: 14,
     },
 
-});
+    cardsContainer: {
+        flexDirection: 'row',
+        gap: 12,
+        marginBottom: 20,
+    },
+
+})
