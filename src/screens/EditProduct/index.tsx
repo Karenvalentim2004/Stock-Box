@@ -5,6 +5,7 @@ import {
     ScrollView,
     Alert,
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import {
     useNavigation,
@@ -79,7 +80,7 @@ export function EditProduct() {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
 
             <Header
                 titulo="Editar Produto"
@@ -134,6 +135,6 @@ export function EditProduct() {
 
             </ScrollView>
 
-        </View>
+        </SafeAreaView>
     )
 }

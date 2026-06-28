@@ -4,9 +4,10 @@ import { createProduto } from '@/database/produtoRepository'
 import { useNavigation } from '@react-navigation/native'
 
 import {
-    View,
     ScrollView,
+    Alert
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Header } from '@/components/Header'
 import { TextField } from '@/components/TextField'
@@ -61,14 +62,16 @@ export function AddProduct() {
                 valor,
             })
 
-            navigation.goBack()
-
             Alert.alert(
                 'Sucesso',
-                'Produto cadastrado.'
+                'Produto cadastrado.',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => navigation.goBack(),
+                    },
+                ]
             )
-
-            navigation.goBack()
 
             setNome('')
             setDescricao('')
@@ -90,7 +93,7 @@ export function AddProduct() {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
 
             <Header
                 titulo="Adicionar Produto"
@@ -150,6 +153,6 @@ export function AddProduct() {
 
             </ScrollView>
 
-        </View>
+        </SafeAreaView>
     )
 }

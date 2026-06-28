@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react'
 
 import {
-    View,
     Text,
     Image,
     ScrollView,
     Alert,
 } from 'react-native'
 
+import { SafeAreaView } from 'react-native-safe-area-context'
+
 import {
     useNavigation,
     useRoute,
+    RouteProp,
 } from '@react-navigation/native'
+
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 import { Header } from '@/components/Header'
 import { Button } from '@/components/Button'
@@ -22,17 +26,27 @@ import {
     deleteProduto,
 } from '@/database/produtoRepository'
 
+import { RootStackParamList } from '@/navigation/types'
+
 import { styles } from './styles'
+
+type NavigationProps = NativeStackNavigationProp<
+    RootStackParamList,
+    'product-details'
+>
+
+type RouteProps = RouteProp<
+    RootStackParamList,
+    'product-details'
+>
 
 export function ProductDetails() {
 
-    const navigation = useNavigation()
+    const navigation = useNavigation<NavigationProps>()
 
-    const route = useRoute()
+    const route = useRoute<RouteProps>()
 
-    const { id } = route.params as {
-        id: number
-    }
+    const { id } = route.params
 
     const [produto, setProduto] = useState<Produto | null>(null)
 
@@ -75,7 +89,7 @@ export function ProductDetails() {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
 
             <Header
                 titulo="Detalhes"
@@ -83,10 +97,9 @@ export function ProductDetails() {
                 mostrarEditar
                 onVoltar={() => navigation.goBack()}
                 onEditar={() =>
-                    navigation.navigate(
-                        'edit-product' as never,
-                        { id } as never
-                    )
+                    navigation.navigate('edit-product', {
+                        id,
+                    })
                 }
             />
 
@@ -145,6 +158,6 @@ export function ProductDetails() {
 
             </ScrollView>
 
-        </View>
+        </SafeAreaView>
     )
 }

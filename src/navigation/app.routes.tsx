@@ -6,7 +6,9 @@ import { AddProduct } from '@/screens/AddProduct'
 import { ProductDetails } from '@/screens/ProductDetails'
 import { EditProduct } from '@/screens/EditProduct'
 
-const Stack = createNativeStackNavigator()
+import { RootStackParamList } from './types'
+
+const Stack = createNativeStackNavigator<RootStackParamList>()
 
 export function AppRoutes() {
     return (

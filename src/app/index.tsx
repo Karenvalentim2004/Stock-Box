@@ -1,11 +1,20 @@
 import { useState, useCallback } from 'react'
 
-import { useNavigation, useFocusEffect } from '@react-navigation/native'
-
 import {
     View,
     FlatList,
 } from 'react-native'
+
+import { SafeAreaView } from 'react-native-safe-area-context'
+
+import {
+    useNavigation,
+    useFocusEffect,
+} from '@react-navigation/native'
+
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+
+import { RootStackParamList } from '@/navigation/types'
 
 import {
     Produto,
@@ -23,9 +32,14 @@ import { Button } from '@/components/Button'
 
 import { styles } from './styles'
 
+type NavigationProps = NativeStackNavigationProp<
+    RootStackParamList,
+    'home'
+>
+
 export function Home() {
 
-    const navigation = useNavigation()
+    const navigation = useNavigation<NavigationProps>()
 
     const [pesquisa, setPesquisa] = useState('')
 
@@ -40,13 +54,9 @@ export function Home() {
                 ? searchProdutos(texto)
                 : getProdutos()
 
-        const total = getTotalProdutos()
-
-        const valor = getValorTotalEstoque()
-
         setProdutos(lista)
-        setTotalProdutos(total)
-        setValorTotal(valor)
+        setTotalProdutos(getTotalProdutos())
+        setValorTotal(getValorTotalEstoque())
 
     }
 
@@ -57,11 +67,14 @@ export function Home() {
     )
 
     function handleAdicionarProduto() {
-        navigation.navigate('add-product' as never)
+        navigation.navigate('add-product')
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView
+            style={styles.container}
+            edges={['top']}
+        >
 
             <Header
                 titulo="Stock Box"
@@ -72,7 +85,6 @@ export function Home() {
                 onChangeText={(texto) => {
 
                     setPesquisa(texto)
-
                     carregarDados(texto)
 
                 }}
@@ -106,23 +118,26 @@ export function Home() {
                         titulo={item.titulo}
                         quantidade={item.quantidade}
                         imagem={item.imagem}
-                        onPress={() =>
-                            navigation.navigate(
-                                'product-details' as never,
-                                {
+                        onPress={() => {
+                            if (item.id !== undefined) {
+                                navigation.navigate('product-details', {
                                     id: item.id,
-                                } as never
-                            )
-                        }
+                                })
+                            }
+                        }}
                     />
                 )}
             />
 
-            <Button
-                titulo="Adicionar Produto"
-                onPress={handleAdicionarProduto}
-            />
+            <View style={styles.footer}>
 
-        </View>
+                <Button
+                    titulo="Adicionar Produto"
+                    onPress={handleAdicionarProduto}
+                />
+
+            </View>
+
+        </SafeAreaView>
     )
 }
